@@ -7,7 +7,6 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import Logger from '../utils/logger';
 import { asyncHandler } from '../utils/asyncHandler';
 import { DataSource } from 'typeorm';
-import { User } from '../entities/user.entity';
 
 // Initialize TypeORM DataSource (Ensure this is done once in your application)
 const dataSource = new DataSource({
@@ -17,9 +16,12 @@ const dataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   synchronize: true,
   logging: false,
-  entities: ['dist/entities/**/*.js'],
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: ['dist/migration/**/*.js'],
   subscribers: ['dist/subscriber/**/*.js'],
 });

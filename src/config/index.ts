@@ -17,5 +17,4 @@ requiredEnvVars.forEach(varName => {
 export const config = {
   awsRegion: process.env.AWS_REGION as string,
   cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID as string,
-  // Add other configuration variables as needed
 };

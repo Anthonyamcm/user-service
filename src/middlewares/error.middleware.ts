@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Logger from '../utils/logger';
 
 export interface CustomError extends Error {

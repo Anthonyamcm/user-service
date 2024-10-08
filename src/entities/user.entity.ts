@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,32 +6,40 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 
 @Entity()
-@Unique(['username'])
-export class User {
+@Unique(['user_id', 'username', 'email', 'phone_number'])
+@Index('IDX_USER_USERNAME', ['username'], { unique: true })
+@Index('IDX_USER_EMAIL', ['email'], { unique: true })
+@Index('IDX_USER_MOBILE', ['phone_number'], { unique: true })
+export class Users {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  user_id!: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: false })
   username!: string;
 
-  @Column({ length: 100, nullable: true })
-  displayName?: string;
+  @Column({ length: 50, nullable: false })
+  display_name!: string;
 
-  @Column({ length: 200, nullable: true })
-  bio?: string;
+  @Column({ unique: true, length: 255 })
+  cognito_sub!: string;
 
-  @Column({ nullable: true })
-  profilePictureUrl?: string;
+  @Column({ length: 255, nullable: true })
+  @IsEmail()
+  email?: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  preferences?: Record<string, any>;
+  @Column({ length: 20, nullable: true })
+  phone_number?: string;
 
   @CreateDateColumn()
-  createdAt!: Date;
+  last_login!: Date;
+
+  @CreateDateColumn()
+  account_created_at!: Date;
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  account_updated_at!: Date;
 }

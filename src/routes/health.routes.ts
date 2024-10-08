@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 
-const router = Router();
+const health = Router();
 
 /**
  * Health Check Route
@@ -8,8 +8,8 @@ const router = Router();
  * @desc Responds with the status of the server
  * @access Public
  */
-router.get('/', (req: Request, res: Response) => {
+health.get('/', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK' });
 });
 
-export default router;
+export default health;

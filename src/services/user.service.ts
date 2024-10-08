@@ -1,6 +1,7 @@
 import { Repository, DataSource } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { Users } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
+import bcrypt from 'bcrypt';
 import Logger from '../utils/logger';
 import {
   UserAlreadyExistsError,
@@ -11,7 +12,7 @@ import {
  * Service responsible for managing user-related operations.
  */
 export class UserService {
-  private userRepository: Repository<User>;
+  private userRepository: Repository<Users>;
 
   /**
    * Initializes the UserService with the provided DataSource and Logger.
@@ -22,7 +23,7 @@ export class UserService {
     private dataSource: DataSource,
     private logger: typeof Logger
   ) {
-    this.userRepository = this.dataSource.getRepository(User);
+    this.userRepository = this.dataSource.getRepository(Users);
   }
 
   /**
@@ -31,7 +32,7 @@ export class UserService {
    * @returns The created User entity.
    * @throws UserAlreadyExistsError if the username is already taken.
    */
-  async createUser(data: CreateUserDto): Promise<User> {
+  async createUser(data: CreateUserDto): Promise<Users> {
     const existingUser = await this.userRepository.findOne({
       where: { username: data.username },
     });
@@ -46,7 +47,7 @@ export class UserService {
     const user = this.userRepository.create(data);
     const savedUser = await this.userRepository.save(user);
 
-    this.logger.info(`User created: ${savedUser.id}`);
+    this.logger.info(`User created: ${savedUser.user_id}`);
     return savedUser;
   }
 
@@ -56,8 +57,8 @@ export class UserService {
    * @returns The User entity.
    * @throws UserNotFoundError if no user is found with the given ID.
    */
-  async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+  async getUserById(id: string): Promise<Users> {
+    const user = await this.userRepository.findOne({ where: { user_id: id } });
 
     if (!user) {
       this.logger.warn(`User not found with ID: ${id}`);
@@ -73,7 +74,7 @@ export class UserService {
    * @returns The User entity.
    * @throws UserNotFoundError if no user is found with the given username.
    */
-  async getUserByUsername(username: string): Promise<User> {
+  async getUserByUsername(username: string): Promise<Users> {
     const user = await this.userRepository.findOne({ where: { username } });
 
     if (!user) {
@@ -91,7 +92,7 @@ export class UserService {
    * @returns The updated User entity.
    * @throws UserNotFoundError if no user is found with the given ID.
    */
-  async updateUser(id: string, data: UpdateUserDto): Promise<User> {
+  async updateUser(id: string, data: UpdateUserDto): Promise<Users> {
     // Ensure the user exists before attempting an update
     const user = await this.getUserById(id);
 
