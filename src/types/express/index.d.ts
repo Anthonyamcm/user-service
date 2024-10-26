@@ -1,11 +1,9 @@
-import { JwtPayload } from 'jsonwebtoken';
+import { User } from 'src/entities/user.entity';
 
 declare global {
-  declare namespace Express {
-    export interface Request {
-      user?: JwtPayload | string;
+  namespace Express {
+    interface Request {
+      user?: User; // 'user' can be 'User' or 'undefined'
     }
   }
 }
-
-export {};
