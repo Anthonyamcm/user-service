@@ -32,6 +32,7 @@ export class UserController {
   })
   @ApiResponse({ status: 409, description: 'Conflict. User already exists.' })
   create(@Body() createUserDto: CreateUserDto) {
+    console.log({ createUserDto });
     return this.userService.create(createUserDto);
   }
 

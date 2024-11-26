@@ -1,5 +1,6 @@
-import { IsString, IsEmail, IsOptional, Length, IsUrl } from 'class-validator';
+import { IsString, IsEmail, IsOptional, Length, IsDate } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'AWS Cognito User ID' })
@@ -12,21 +13,22 @@ export class CreateUserDto {
   readonly username!: string;
 
   @ApiPropertyOptional({ description: 'Display name' })
+  @IsOptional()
   @IsString()
-  readonly displayName!: string;
+  readonly displayName?: string;
 
-  @ApiProperty({ description: 'User email address' })
+  @ApiPropertyOptional({ description: 'User email address' })
   @IsOptional()
   @IsEmail()
   readonly email?: string;
 
-  @ApiPropertyOptional({ description: 'User bio' })
+  @ApiPropertyOptional({ description: 'User mobile number' })
   @IsOptional()
   @IsString()
-  readonly bio?: string;
+  readonly mobile?: string;
 
-  @ApiPropertyOptional({ description: 'Profile picture URL' })
-  @IsOptional()
-  @IsUrl()
-  readonly profilePictureUrl?: string;
+  @ApiProperty({ description: 'User date of birth' })
+  @IsDate()
+  @Type(() => Date)
+  readonly dateOfBirth!: Date;
 }

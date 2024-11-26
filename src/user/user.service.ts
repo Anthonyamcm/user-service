@@ -24,6 +24,8 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     this.logger.info(`Creating user with username: ${createUserDto.username}`);
 
+    console.log({ createUserDto });
+
     const { cognitoId, username, email } = createUserDto;
 
     // Check for existing user
